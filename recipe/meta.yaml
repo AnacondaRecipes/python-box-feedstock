@@ -25,10 +25,8 @@ requirements:
     - python
     - cython
     - pip
-    - pytest-runner
   run:
     - python
-    - pip
     - ruamel.yaml
     - toml
 
