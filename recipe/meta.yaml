@@ -17,9 +17,8 @@ build:
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - cython                                 # [build_platform != target_platform]
+    - python
+    - cython
     - {{ compiler('c') }}
   host:
     - python
@@ -31,6 +30,8 @@ requirements:
     - toml
 
 test:
+  requires:
+    - pip
   imports:
     - box
   commands:
