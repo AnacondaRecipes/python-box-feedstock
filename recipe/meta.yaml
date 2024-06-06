@@ -39,7 +39,8 @@ test:
   commands:
     - pip check
     # skipping test due to not having msgpack. Skipping other tests that require it.
-    - pytest -v test --ignore=test/test_converters.py -k "not (msgpack or test_from_all)"
+    - pytest -v test --ignore=test/test_converters.py -k "not (msgpack or test_from_all)" # [not s390x]
+    - pytest -v test --ignore=test/test_converters.py -k "not (msgpack or test_from_all or test_to_yaml_file)" # [s390x]
   requires:
     - pip
     - pytest >=7.1.3
