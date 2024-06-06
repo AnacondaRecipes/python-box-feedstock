@@ -1,37 +1,51 @@
 {% set name = "python-box" %}
-{% set version = "5.4.1" %}
-{% set sha256 = "b68e0f8abc86f3deda751b3390f64df64a0989459de51ba4db949662a7b4d8ac" %}
+{% set version = "7.1.1" %}
+{% set sha256 = "05e38713932906f86eac7411fcc1c6a9231fee5fac8c1c6ce64acc362feb8340" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://github.com/cdgriffith/Box/archive/refs/tags/{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
-  noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  # python 3.12 causes segmentation fault in tests.
+  skip: True  # [py==312]
 
 requirements:
+  build:
+    - {{ compiler('c') }}
   host:
-    - python >=3.6
+    - cython
+    - python
     - pip
-    - pytest-runner
+    - wheel
+    - setuptools
   run:
-    - python >=3.6
-    - pip
-    - ruamel.yaml
-    - toml
+    - python
+  run_constrained:
+    - msgpack >=1.0.0
+    - ruamel.yaml >=0.17
 
 test:
+  source_files:
+    - test
   imports:
     - box
   commands:
     - pip check
+    # skipping test due to not having msgpack. Skipping other tests that require it.
+    - pytest -v test --ignore=test/test_converters.py -k "not (msgpack or test_from_all)"
+  requires:
+    - pip
+    - pytest >=7.1.3
+    - ruamel.yaml >=0.17
+    - tomli >=1.2.3  # [py<311]
+    - tomli-w >=1.0.0
 
 about:
   home: https://github.com/cdgriffith/Box
