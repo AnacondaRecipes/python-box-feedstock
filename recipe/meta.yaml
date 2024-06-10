@@ -11,6 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
+
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   # python 3.12 causes segmentation fault in tests.
