@@ -38,10 +38,8 @@ test:
     - box
   commands:
     - pip check
-    # skipping test due to not having msgpack. Skipping other tests that require it.
-    # - pytest -v test --ignore=test/test_converters.py -k "not test_from_all" # [not s390x]
-    # - pytest -v test --ignore=test/test_converters.py -k "not (test_from_all or test_to_yaml_file)" # [s390x]
-    - pytest -v test
+    - pytest -v test -k "not test_to_yaml_file" # [s390x]
+    - pytest -v test # [not s390x]
   requires:
     - msgpack-python >=1.0.0
     - pip
